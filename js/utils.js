@@ -9,14 +9,4 @@ export const getRandomArbitrary = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const lengthCheck = (string, maxLength) => {
-  if(typeof string !== 'string'){
-    return 'В поле ввода строка, должна быть строка';
-  } else if (typeof maxLength !== 'number' || maxLength < 1) {
-    return 'В поле ввода числа, должно быть число и число должно быть больше нуля';
-  }else if (string.length <= maxLength){
-    return true;
-  }
-  return false;
-  // return string.length <= maxLength ? true : false;
-};
+export const lengthCheck = (string, maxLength) => string.length <= maxLength;
