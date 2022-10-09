@@ -1,4 +1,4 @@
-export const getRandomArbitrary = (min, max) => {
+const getRandomArbitrary = (min, max) => {
   if(min >= max || !max){
     return ' минимальное число должно быть меньше максимального';
   } else if (min < 0) {
@@ -9,4 +9,6 @@ export const getRandomArbitrary = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const lengthCheck = (string, maxLength) => string.length <= maxLength;
+const lengthCheck = (string, maxLength) => string.length <= maxLength;
+
+export {getRandomArbitrary, lengthCheck};
