@@ -7,11 +7,8 @@ const bigPicturePhoto = (imageData) => {
   const commentsCount = bigPicture.querySelector('.comments-count');
   const cancelPicture = bigPicture.querySelector('#picture-cancel');
   const socialCaption = bigPicture.querySelector('.social__caption');
-  // const socialCommentCount = bigPicture.querySelector('.social__comment-count');
-  // const commentsLoader = bigPicture.querySelector('.comments-loader');
-
-  // socialCommentCount.textContent = `100 из ${socialCommentCount.textContent = imageData.comments.length}`;
-  // console.log('count',  imageData)
+  const socialCommentCount = bigPicture.querySelector('.social__comment-count');
+  const commentsLoader = bigPicture.querySelector('.comments-loader');
 
   const onKeydown = (evt) => {
     if(evt.key === 'Escape'){
@@ -27,8 +24,8 @@ const bigPicturePhoto = (imageData) => {
     window.removeEventListener('keydown', onKeydown);
   };
 
-  // socialCommentCount.classList.add('hidden');
-  // commentsLoader.classList.add('hidden');
+  socialCommentCount.classList.add('hidden');
+  commentsLoader.classList.add('hidden');
   document.body.classList.add('modal-open');
 
   cancelPicture.addEventListener('click', onClickCross);

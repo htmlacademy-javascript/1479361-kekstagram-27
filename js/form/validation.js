@@ -1,52 +1,12 @@
-const form = () => {
-  const upLoad = document.querySelector('#upload-file');
-  const upLoadOverlay = document.querySelector('.img-upload__overlay');
-  const upLoadChannelButton = upLoadOverlay.querySelector('#upload-cancel');
-  const hashTag = upLoadOverlay.querySelector('.text__hashtags');
-  const textDescription = upLoadOverlay.querySelector('.text__description');
-
-
-  const MAX_LENGTH_TEXT = 140;
-
-  const onKeydown = (evt) => {
-    if(
-      evt.key === 'Escape'
-      && !evt.target.classList.contains('text__hashtags')
-      && !evt.target.classList.contains('text__description')
-    ){
-      document.body.classList.remove('modal-open');
-      upLoadOverlay.classList.add('hidden');
-      window.removeEventListener('keydown', onKeydown);
-      upLoad.value = '';
-      textDescription.value = '';
-      hashTag.value = '';
-    }
-  };
-
-  const onClickCross = () => {
-    upLoadOverlay.classList.add('hidden');
-    window.removeEventListener('keydown', onKeydown);
-    document.body.classList.remove('modal-open');
-    upLoad.value = '';
-    textDescription.value = '';
-    hashTag.value = '';
-  };
-
-  const loadingPhoto = () => {
-    document.body.classList.add('modal-open');
-    upLoadOverlay.classList.remove('hidden');
-    upLoadChannelButton.addEventListener('click', onClickCross);
-    window.addEventListener('keydown', onKeydown);
-    hashTag.setAttribute('required', true);
-    textDescription.setAttribute('maxlength', MAX_LENGTH_TEXT);
-  };
-
-  // Валидация
-
+const validation = () => {
   const MAX_SYMBOLS = 20;
   const MAX_HASHTAGS = 5;
 
   const formUpLoad = document.querySelector('.img-upload__form');
+  const inputHashtag = formUpLoad.querySelector('.text__hashtags');
+  const buttonUploadSubmit = document.querySelector('.img-upload__submit');
+  let errorMessage = '';
+  const error = () => errorMessage;
 
   const pristine = new Pristine (formUpLoad, {
     classTo: 'img-upload__field-wrapper',
@@ -56,12 +16,6 @@ const form = () => {
     errorTextTag: 'div',
     errorTextClass: 'img-upload__error',
   });
-
-  const inputHashtag = formUpLoad.querySelector('.text__hashtags');
-
-  let errorMessage = '';
-
-  const error = () => errorMessage;
 
   const hashtagsHandler = (value) => {
     errorMessage = '';
@@ -93,7 +47,7 @@ const form = () => {
       },
       {
         check: inputArray.some((item) => item.length > MAX_SYMBOLS),
-        error: `Максимальна длина одного Хеш-тега не может быть больше ${MAX_SYMBOLS}, включая решетку`,
+        error: `Максимальная длина одного Хеш-тега не может быть больше ${MAX_SYMBOLS}, включая решетку`,
       },
       {
         check: inputArray.length > MAX_HASHTAGS,
@@ -116,8 +70,6 @@ const form = () => {
 
   pristine.addValidator(inputHashtag, hashtagsHandler, error, 2, false);
 
-  const buttonUploadSubmit = document.querySelector('.img-upload__submit');
-
   const onHashTagInput = () => {
     if(pristine.validate()){
       buttonUploadSubmit.disabled = false;
@@ -137,11 +89,6 @@ const form = () => {
       buttonUploadSubmit.disabled = true;
     }
   });
-
-  // Конец валидации
-
-  upLoad.addEventListener('change', loadingPhoto);
-
 };
 
-export default form;
+export default validation;
