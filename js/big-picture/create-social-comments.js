@@ -5,7 +5,7 @@ export const createSocialComments = (commentsData) => {
   const socialText = comment.querySelector('p');
   commentsContainer.innerHTML = '';
 
-  commentsData.forEach((commentData) => {
+  commentsData.map((commentData) => {
     const commentContainer = comment.cloneNode(true);
     socialPicture.src = commentData.avatar;
     socialPicture.alt = commentData.name;
