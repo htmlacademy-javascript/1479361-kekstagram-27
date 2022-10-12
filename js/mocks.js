@@ -11,7 +11,7 @@ const generatePhotosData = () => {
   for(let i = 0; i < 25; i++) {
     const commentsCount = [];
 
-    for(let j = 0; j < getRandomArbitrary(1, 20); j++){
+    for(let j = 0; j < getRandomArbitrary(10, 20); j++){
       const comment = {
         id: j + i * 30,
         avatar: `../img/avatar-${getRandomArbitrary(1, 6)}.svg`,
