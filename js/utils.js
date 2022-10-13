@@ -11,4 +11,7 @@ const getRandomArbitrary = (min, max) => {
 
 const lengthCheck = (string, maxLength) => string.length <= maxLength;
 
-export {getRandomArbitrary, lengthCheck};
+const declOfNum = (number, words) => words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? Math.abs(number) % 10 : 5]];
+
+
+export {getRandomArbitrary, lengthCheck, declOfNum};
