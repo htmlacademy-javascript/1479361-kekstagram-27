@@ -1,3 +1,5 @@
+import effectsPhoto from '../photo-editor/effects-photo.js';
+import scalePhoto from '../photo-editor/scale-photo.js';
 import validation from './validation.js';
 
 const form = () => {
@@ -44,6 +46,8 @@ const form = () => {
   validation();
 
   upLoad.addEventListener('change', loadingPhoto);
+  scalePhoto();
+  effectsPhoto();
 
 };
 

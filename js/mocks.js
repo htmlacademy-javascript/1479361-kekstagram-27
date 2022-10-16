@@ -11,10 +11,10 @@ const generatePhotosData = () => {
   for(let i = 0; i < 25; i++) {
     const commentsCount = [];
 
-    for(let j = 0; j < getRandomArbitrary(15, 20); j++){
+    for(let j = 0; j < getRandomArbitrary(100, 101); j++){
       const comment = {
         id: j + i * 30,
-        avatar: `../img/avatar-${getRandomArbitrary(1, 6)}.svg`,
+        avatar: `/img/avatar-${getRandomArbitrary(1, 6)}.svg`,
         message: textComments[getRandomArbitrary(0, textComments.length - 1)],
         name: names[getRandomArbitrary(0, names.length - 1)]
       };
