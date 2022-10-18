@@ -10,6 +10,7 @@ const form = () => {
   const upLoadChannelButton = upLoadOverlay.querySelector('#upload-cancel');
   const hashTag = upLoadOverlay.querySelector('.text__hashtags');
   const textDescription = upLoadOverlay.querySelector('.text__description');
+  const effectsList = document.querySelector('.img-upload__form');
 
   const onKeydown = (evt) => {
     if(
@@ -26,7 +27,9 @@ const form = () => {
     }
   };
 
+
   const onClickCross = () => {
+
     upLoadOverlay.classList.add('hidden');
     window.removeEventListener('keydown', onKeydown);
     document.body.classList.remove('modal-open');
@@ -42,12 +45,13 @@ const form = () => {
     window.addEventListener('keydown', onKeydown);
     hashTag.setAttribute('required', true);
     textDescription.setAttribute('maxlength', MAX_LENGTH_TEXT);
+    scalePhoto();
+    effectsPhoto();
+    validation();
+    effectsList.reset();
   };
-  validation();
 
   upLoad.addEventListener('change', loadingPhoto);
-  scalePhoto();
-  effectsPhoto();
 
 };
 
