@@ -12,11 +12,16 @@ const effectsPhoto = () => {
   const effectsList = document.querySelector('.effects__list');
   const effectsItems = effectsList.querySelectorAll('.effects__item');
   const photoPreview = document.querySelector('.img-upload__preview');
+  const effectValue = document.querySelector('.effect-level__value');
+
+  sliderElement.noUiSlider.on('update', () => {
+    effectValue.value = sliderElement.noUiSlider.get();
+  });
 
   sliderElement.hidden = true;
   photoPreview.style.filter = '';
 
-  const movementSlider = (min,max,start,step,name, calculsSystem) => {
+  const movementSlider = (min, max, start, step, name, calculsSystem) => {
     sliderElement.noUiSlider.updateOptions({
       range: {
         min: min,
@@ -39,10 +44,28 @@ const effectsPhoto = () => {
       photoPreview.classList.add('img-upload__preview');
       photoPreview.classList.add(`effects__preview--${effectInput.value}`);
 
+      const effects = {
+        chrome: {
+          min: 0,
+          max: 1,
+          start: 1,
+          step: 0.1,
+          name: 'grayscale',
+          calculsSystem: ''
+        },
+      };
+
       switch (effectInput.value){
         case 'chrome':
           sliderElement.hidden = false;
-          movementSlider(0, 1, 1, 0.1, 'grayscale', '');
+          movementSlider(
+            effects.chrome.min,
+            effects.chrome.max,
+            effects.chrome.start,
+            effects.chrome.step,
+            effects.chrome.name,
+            effects.chrome.calculsSystem
+          );
           break;
         case 'sepia':
           sliderElement.hidden = false;

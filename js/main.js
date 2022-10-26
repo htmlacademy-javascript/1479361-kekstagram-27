@@ -1,6 +1,5 @@
-import generatePhotos from './small-photos.js';
-import photosData from './mocks.js';
-import form from './form/form.js';
+import {loadingPhoto} from './form/form.js';
 
-generatePhotos(photosData);
-form();
+const upLoad = document.querySelector('#upload-file');
+
+upLoad.addEventListener('change', loadingPhoto);
