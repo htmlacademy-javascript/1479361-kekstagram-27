@@ -1,7 +1,14 @@
 import generatePhotos from './small-photos.js';
+import { sortPhotos } from './sort/sort-photos.js';
 import { showAlert } from './utils.js';
 
 const adForm = document.querySelector('.img-upload__form');
+const photoFilters = document.querySelector('.img-filters');
+let dataPhotosArr = [];
+
+const filtersForm = photoFilters.querySelector('.img-filters__form');
+
+filtersForm.addEventListener('click', sortPhotos);
 
 fetch('https://27.javascript.pages.academy/kekstagram/data')
   .then((response) => {
@@ -13,8 +20,12 @@ fetch('https://27.javascript.pages.academy/kekstagram/data')
   })
   .then((response) => response.json())
   .then((dataPhotos) => {
-    generatePhotos(dataPhotos);
+    dataPhotosArr = dataPhotos;
+    generatePhotos(dataPhotosArr);
   })
+  .then(
+    photoFilters.className = 'img-filters container'
+  )
   .catch(() =>
     showAlert()
   );
@@ -38,4 +49,4 @@ const postPhoto = (onSuccess, onError) => {
   });
 };
 
-export {postPhoto};
+export {postPhoto, dataPhotosArr};

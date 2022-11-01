@@ -1,6 +1,3 @@
-import { postPhoto } from '../api.js';
-import { onError, onSuccess } from './form.js';
-
 const MAX_SYMBOLS = 20;
 const MAX_HASHTAGS = 5;
 
@@ -85,7 +82,7 @@ inputHashtag.addEventListener('input', onHashTagInput);
 formUpLoad.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
-  postPhoto(onSuccess,onError);
+  buttonUploadSubmit.disabled = true;
 
   if(pristine.validate()){
     buttonUploadSubmit.disabled = false;
