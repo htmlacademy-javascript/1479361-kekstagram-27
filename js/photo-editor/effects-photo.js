@@ -13,12 +13,13 @@ const effectsPhoto = () => {
   const effectsItems = effectsList.querySelectorAll('.effects__item');
   const photoPreview = document.querySelector('.img-upload__preview');
   const effectValue = document.querySelector('.effect-level__value');
+  const effectLevel = document.querySelector('.effect-level');
 
   sliderElement.noUiSlider.on('update', () => {
     effectValue.value = sliderElement.noUiSlider.get();
   });
 
-  sliderElement.hidden = true;
+  effectLevel.hidden = true;
   photoPreview.style.filter = '';
 
   const movementSlider = (min, max, start, step, name, calculsSystem) => {
@@ -44,6 +45,7 @@ const effectsPhoto = () => {
       photoPreview.classList.add('img-upload__preview');
       photoPreview.classList.add(`effects__preview--${effectInput.value}`);
 
+      // Как тут все сделать без свича и объектом?
       const effects = {
         chrome: {
           min: 0,
@@ -57,7 +59,7 @@ const effectsPhoto = () => {
 
       switch (effectInput.value){
         case 'chrome':
-          sliderElement.hidden = false;
+          effectLevel.hidden = false;
           movementSlider(
             effects.chrome.min,
             effects.chrome.max,
@@ -68,24 +70,24 @@ const effectsPhoto = () => {
           );
           break;
         case 'sepia':
-          sliderElement.hidden = false;
+          effectLevel.hidden = false;
           movementSlider(0, 1, 1, 0.1, 'sepia', '');
           break;
         case 'marvin':
-          sliderElement.hidden = false;
+          effectLevel.hidden = false;
           movementSlider(0, 100, 100, 1, 'invert', '%');
           break;
         case 'phobos':
-          sliderElement.hidden = false;
+          effectLevel.hidden = false;
           movementSlider(0, 3, 3, 0.1, 'blur', 'px');
           break;
         case 'heat':
-          sliderElement.hidden = false;
+          effectLevel.hidden = false;
           movementSlider(1, 3, 3, 0.1, 'brightness', '');
           break;
         case 'none':
           photoPreview.style.filter = '';
-          sliderElement.hidden = true;
+          effectLevel.hidden = true;
           break;
       }
     });

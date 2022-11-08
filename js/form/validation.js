@@ -69,13 +69,13 @@ const hashtagsHandler = (value) => {
 
 pristine.addValidator(inputHashtag, hashtagsHandler, error, 2, false);
 
-const onHashTagInput = () => {
-  if(pristine.validate()){
-    buttonUploadSubmit.disabled = false;
-  }else {
-    buttonUploadSubmit.disabled = true;
-  }
+const onHashTagInput = () =>{
+
+  // хрень какая-то надо подумать как блокнуть кнопку адекватнее.
+  const disabledButton = pristine.validate() ? buttonUploadSubmit.disabled = false : buttonUploadSubmit.disabled = true;
+  return disabledButton;
 };
+
 
 inputHashtag.addEventListener('input', onHashTagInput);
 
@@ -83,11 +83,4 @@ formUpLoad.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   buttonUploadSubmit.disabled = true;
-
-  if(pristine.validate()){
-    buttonUploadSubmit.disabled = false;
-  }else {
-    buttonUploadSubmit.disabled = true;
-    return false;
-  }
 });

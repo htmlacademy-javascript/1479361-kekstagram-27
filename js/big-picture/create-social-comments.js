@@ -1,4 +1,4 @@
-import { declOfNum } from '../utils.js';
+import { declarationOfNumber } from '../utils.js';
 
 export const createSocialComments = (commentsData) => {
   const STEP_RENDER_COMMENTS = 5;
@@ -20,8 +20,8 @@ export const createSocialComments = (commentsData) => {
   commentsContainer.innerHTML = '';
 
   socialCommentCount.textContent = commentsData.length > CURRENT_COUNT_COMMENTS
-    ? `${CURRENT_COUNT_COMMENTS} из ${commentsData.length} ${declOfNum(commentsData.length, words)}`
-    : (commentsLoaderButton.classList.add('hidden') ,`${commentsData.length} из ${commentsData.length} ${declOfNum(commentsData.length, words)}`);
+    ? `${CURRENT_COUNT_COMMENTS} из ${commentsData.length} ${declarationOfNumber(commentsData.length, words)}`
+    : (commentsLoaderButton.classList.add('hidden') ,`${commentsData.length} из ${commentsData.length} ${declarationOfNumber(commentsData.length, words)}`);
 
   commentsLoaderButton.addEventListener('click', () => {
     from += STEP_RENDER_COMMENTS;
@@ -39,10 +39,10 @@ export const createSocialComments = (commentsData) => {
       if(howMany >= commentsData.length){
         commentsLoaderButton.classList.add('hidden');
         socialComm.classList.remove('social__comment-count');
-        socialComm.innerHTML = `${commentsData.length} из <span class="comments-count">${commentsData.length}</span> ${declOfNum(commentsData.length, words)}`;
+        socialComm.innerHTML = `${commentsData.length} из <span class="comments-count">${commentsData.length}</span> ${declarationOfNumber(commentsData.length, words)}`;
       }else {
         socialComm.classList.remove('social__comment-count');
-        socialComm.innerHTML = `${howMany} из <span class="comments-count">${commentsData.length}</span> ${declOfNum(commentsData.length, words)}`;
+        socialComm.innerHTML = `${howMany} из <span class="comments-count">${commentsData.length}</span> ${declarationOfNumber(commentsData.length, words)}`;
       }
 
       socialCommentCount.innerHTML = '';

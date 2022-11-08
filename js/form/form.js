@@ -3,6 +3,8 @@ import effectsPhoto from '../photo-editor/effects-photo.js';
 import scalePhoto from '../photo-editor/scale-photo.js';
 import './validation.js';
 
+// const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const upLoad = document.querySelector('#upload-file');
 const upLoadOverlay = document.querySelector('.img-upload__overlay');
 const upLoadChannelButton = upLoadOverlay.querySelector('#upload-cancel');
@@ -14,7 +16,16 @@ const badRequestFragment = document.querySelector('#error').content;
 const badRequest = badRequestFragment.cloneNode(true);
 const badRequestModal = badRequest.querySelector('.error');
 const effectValue = document.querySelector('.effect-level__value');
-const buttonUploadSubmit = document.querySelector('.img-upload__submit');
+const buttonUploadSubmit = document.querySelector('#upload-submit');
+const photoPreview = document.querySelector('img');
+
+const resetValidation = () => {
+  const pristineError = document.querySelector('.pristine-error');
+  // const submitButton = document.querySelector('#upload-submit');
+  pristineError.textContent = '';
+  // submitButton.disabled = false;
+};
+
 
 const onKeydown = (evt) => {
   if(
@@ -25,6 +36,7 @@ const onKeydown = (evt) => {
     document.body.classList.remove('modal-open');
     upLoadOverlay.classList.add('hidden');
     document.removeEventListener('keydown', onKeydown);
+    resetValidation();
     effectsList.reset();
   }
 };
@@ -43,6 +55,7 @@ const onClickCross = () => {
   upLoadOverlay.classList.add('hidden');
   document.removeEventListener('keydown', onKeydown);
   document.body.classList.remove('modal-open');
+  resetValidation();
   effectsList.reset();
 };
 
@@ -90,7 +103,7 @@ const loadingPhoto = () => {
   upLoadOverlay.classList.remove('hidden');
   upLoadChannelButton.addEventListener('click', onClickCross);
   document.addEventListener('keydown', onKeydown);
-
+  photoPreview.src = URL.createObjectURL(upLoad.files[0]);
   scalePhoto();
   effectsPhoto();
   postPhoto(onSuccess, onError);
