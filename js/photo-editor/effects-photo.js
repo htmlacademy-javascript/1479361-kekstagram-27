@@ -1,98 +1,98 @@
-const sliderElement = document.querySelector('.effect-level__slider');
-noUiSlider.create(sliderElement, {
-  range: {
-    min: 0,
-    max: 1,
-  },
-  start: 1,
-  step: 0.1,
-});
+const DEFAULT_EFFECT_LEVEL = 100;
+const RADIX = 10;
+const EFFECTS_STEP = 0.01;
+const MAX_BLUR_VALUE = 3;
+const MAX_BRIGHTNES = 3;
 
-const effectsPhoto = () => {
-  const effectsList = document.querySelector('.effects__list');
-  const effectsItems = effectsList.querySelectorAll('.effects__item');
-  const photoPreview = document.querySelector('.img-upload__preview');
-  const effectValue = document.querySelector('.effect-level__value');
-  const effectLevel = document.querySelector('.effect-level');
-
-  sliderElement.noUiSlider.on('update', () => {
-    effectValue.value = sliderElement.noUiSlider.get();
-  });
-
-  effectLevel.hidden = true;
-  photoPreview.style.filter = '';
-
-  const movementSlider = (min, max, start, step, name, calculsSystem) => {
-    sliderElement.noUiSlider.updateOptions({
-      range: {
-        min: min,
-        max: max,
-      },
-      start: start,
-      step: step,
-    });
-
-    sliderElement.noUiSlider.on('update', () => {
-      photoPreview.style.filter = `${name}(${sliderElement.noUiSlider.get()}${calculsSystem})`;
-    });
-  };
-
-  effectsItems.forEach((it) => {
-    const effectInput = it.querySelector('input');
-    photoPreview.classList.remove(`effects__preview--${effectInput.value}`);
-    effectInput.addEventListener('click', () => {
-      photoPreview.removeAttribute('class');
-      photoPreview.classList.add('img-upload__preview');
-      photoPreview.classList.add(`effects__preview--${effectInput.value}`);
-
-      // Как тут все сделать без свича и объектом?
-      const effects = {
-        chrome: {
-          min: 0,
-          max: 1,
-          start: 1,
-          step: 0.1,
-          name: 'grayscale',
-          calculsSystem: ''
-        },
-      };
-
-      switch (effectInput.value){
-        case 'chrome':
-          effectLevel.hidden = false;
-          movementSlider(
-            effects.chrome.min,
-            effects.chrome.max,
-            effects.chrome.start,
-            effects.chrome.step,
-            effects.chrome.name,
-            effects.chrome.calculsSystem
-          );
-          break;
-        case 'sepia':
-          effectLevel.hidden = false;
-          movementSlider(0, 1, 1, 0.1, 'sepia', '');
-          break;
-        case 'marvin':
-          effectLevel.hidden = false;
-          movementSlider(0, 100, 100, 1, 'invert', '%');
-          break;
-        case 'phobos':
-          effectLevel.hidden = false;
-          movementSlider(0, 3, 3, 0.1, 'blur', 'px');
-          break;
-        case 'heat':
-          effectLevel.hidden = false;
-          movementSlider(1, 3, 3, 0.1, 'brightness', '');
-          break;
-        case 'none':
-          photoPreview.style.filter = '';
-          effectLevel.hidden = true;
-          break;
-      }
-    });
-  });
-
+const Slider = {
+  MIN: 0,
+  MAX: 100,
+  STEP: 1,
 };
 
-export default effectsPhoto;
+const uploadForm = document.querySelector('.img-upload__form');
+const effectsList = uploadForm.querySelector('.effects__list');
+const imagePreview = uploadForm.querySelector('.img-upload__preview');
+const sliderUpload = uploadForm.querySelector('.img-upload__effect-level');
+const effectLevelValue = uploadForm.querySelector('.effect-level__value');
+const sliderElement = uploadForm.querySelector('.effect-level__slider');
+const image = imagePreview.querySelector('img');
+
+noUiSlider.create(sliderElement, {
+  range : {
+    min: Slider.MIN,
+    max: Slider.MAX,
+  },
+  start: Slider.MAX,
+  step: Slider.STEP,
+  connect: 'lower'
+});
+
+effectLevelValue.value = DEFAULT_EFFECT_LEVEL;
+let currentEffect = '';
+sliderUpload.classList.add('visually-hidden');
+
+const effects = {
+  none: () => {
+    sliderUpload.classList.add('visually-hidden');
+    return 'none';
+  },
+
+  chrome: () => {
+    sliderUpload.classList.remove('visually-hidden');
+    return `grayscale(${parseInt(effectLevelValue.value, RADIX) * EFFECTS_STEP})`;
+  },
+
+  sepia: () => {
+    sliderUpload.classList.remove('visually-hidden');
+    return `sepia(${parseInt(effectLevelValue.value, RADIX) * EFFECTS_STEP})`;
+  },
+
+  marvin: () => {
+    sliderUpload.classList.remove('visually-hidden');
+    return `invert(${Math.floor(effectLevelValue.value)}%)`;
+  },
+
+  phobos: () => {
+    sliderUpload.classList.remove('visually-hidden');
+    return `blur(${(parseInt(effectLevelValue.value, RADIX) * MAX_BLUR_VALUE) * EFFECTS_STEP}px)`;
+  },
+
+  heat: () => {
+    sliderUpload.classList.remove('visually-hidden');
+    return `brightness(${(parseInt(effectLevelValue.value, RADIX) * MAX_BRIGHTNES) * EFFECTS_STEP})`;
+  },
+};
+
+const effectSelectionClick = (evt) => {
+  let target = evt.target;
+
+  if(target.classList.contains('effects__label')){
+    target = evt.target.querySelector('span');
+  }
+
+  if(target.classList.contains('effects__preview')) {
+    if(currentEffect !== '') {
+      image.classList.remove(currentEffect);
+    }
+
+    sliderElement.noUiSlider.set(Slider.MAX);
+    effectLevelValue.value = Slider.MAX;
+
+    currentEffect = target.classList[1];
+    image.classList.add(currentEffect);
+    image.style.filter = effects[currentEffect.replace('effects__preview--', '')]();
+  }
+};
+
+const changeFilter = () => {
+  effectLevelValue.value = sliderElement.noUiSlider.get();
+
+  image.style.filter = effects[currentEffect.replace('effects__preview--', '')]();
+};
+
+effectsList.addEventListener('click', effectSelectionClick);
+
+sliderElement.noUiSlider.on('change', changeFilter);
+
+export {effects, image};

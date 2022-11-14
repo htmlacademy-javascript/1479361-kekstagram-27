@@ -1,9 +1,10 @@
-import { postPhoto } from '../api.js';
-import effectsPhoto from '../photo-editor/effects-photo.js';
-import scalePhoto from '../photo-editor/scale-photo.js';
+import { sendRequest } from '../api.js';
+import { image, effects } from '../photo-editor/effects-photo.js';
+import {scalePhoto} from '../photo-editor/scale-photo.js';
+import { checkEscape } from '../utils.js';
 import './validation.js';
 
-// const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const upLoad = document.querySelector('#upload-file');
 const upLoadOverlay = document.querySelector('.img-upload__overlay');
@@ -15,21 +16,23 @@ const successModal = successRequest.querySelector('.success');
 const badRequestFragment = document.querySelector('#error').content;
 const badRequest = badRequestFragment.cloneNode(true);
 const badRequestModal = badRequest.querySelector('.error');
-const effectValue = document.querySelector('.effect-level__value');
 const buttonUploadSubmit = document.querySelector('#upload-submit');
 const photoPreview = document.querySelector('img');
+const adForm = document.querySelector('.img-upload__form');
+let formData;
 
 const resetValidation = () => {
   const pristineError = document.querySelector('.pristine-error');
-  // const submitButton = document.querySelector('#upload-submit');
-  pristineError.textContent = '';
-  // submitButton.disabled = false;
+  if(pristineError){
+    pristineError.textContent = '';
+  }
+  buttonUploadSubmit.disabled = false;
 };
 
 
 const onKeydown = (evt) => {
   if(
-    evt.key === 'Escape'
+    checkEscape(evt)
     && !evt.target.classList.contains('text__hashtags')
     && !evt.target.classList.contains('text__description')
   ){
@@ -38,15 +41,14 @@ const onKeydown = (evt) => {
     document.removeEventListener('keydown', onKeydown);
     resetValidation();
     effectsList.reset();
+    image.style.filter = effects.none();
   }
 };
 
 const onKeydownBadModal = (evt) => {
-  if(evt.key === 'Escape'){
-    successModal.remove();
-    badRequestModal.remove();
-    document.body.removeEventListener('keyDown', onKeydownBadModal);
-    // При нажатии на esc на модалке с ошибкой, надо снова навесить обработчик событий. Но он срабатывает сразу же и закрывает форму с ФОТО
+  if(checkEscape(evt)){
+    evt.currentTarget.body.querySelector('.popup_alert').remove();
+    document.removeEventListener('keydown', onKeydownBadModal);
     document.addEventListener('keydown', onKeydown);
   }
 };
@@ -57,31 +59,21 @@ const onClickCross = () => {
   document.body.classList.remove('modal-open');
   resetValidation();
   effectsList.reset();
+  image.style.filter = effects.none();
 };
 
 const onClickModal = (evt) => {
-  if(
-    evt.target.className === 'success__inner'
-  || evt.target.className === 'success__title'
-  || evt.target.className === 'error__title'
-  || evt.target.className === 'error__inner'
-  ){
-    return '';
+  if(evt.target.tagName === 'H2' || evt.target.tagName === 'DIV'){
+    return null;
   }
-  successModal.remove();
-  badRequestModal.remove();
-  document.body.removeEventListener('keyDown',onKeydownBadModal);
-};
-
-const onClickModalBad = () => {
-  document.addEventListener('keydown', onKeydown);
+  evt.currentTarget.remove();
+  document.removeEventListener('keydown',onKeydownBadModal);
 };
 
 const onSuccess = () => {
   document.body.append(successModal);
   buttonUploadSubmit.disabled = false;
-
-  document.body.addEventListener('keydown', onKeydownBadModal);
+  document.addEventListener('keydown', onKeydownBadModal);
   successModal.addEventListener('click', onClickModal);
   onClickCross();
 };
@@ -89,27 +81,35 @@ const onSuccess = () => {
 const onError = () => {
   document.body.append(badRequestModal);
   buttonUploadSubmit.disabled = false;
-
-  // Удаляю глобальный обработчик escape
   document.removeEventListener('keydown', onKeydown);
-
-  document.body.addEventListener('keydown', onKeydownBadModal);
+  document.addEventListener('keydown', onKeydownBadModal);
   badRequestModal.addEventListener('click', onClickModal);
-  badRequestModal.addEventListener('click', onClickModalBad);
 };
 
-const loadingPhoto = () => {
+const postPhoto = (evt) => {
+  evt.preventDefault();
+  formData = new FormData(evt.target);
+  sendRequest(onSuccess, onError, 'POST', formData);
+};
+
+const loadPhoto = (evt) => {
+  evt.preventDefault();
   document.body.classList.add('modal-open');
   upLoadOverlay.classList.remove('hidden');
   upLoadChannelButton.addEventListener('click', onClickCross);
   document.addEventListener('keydown', onKeydown);
-  photoPreview.src = URL.createObjectURL(upLoad.files[0]);
+
+  const file = upLoad.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if(matches){
+    photoPreview.src = URL.createObjectURL(file);
+  }
+
   scalePhoto();
-  effectsPhoto();
-  postPhoto(onSuccess, onError);
-  effectValue.value = '100';
 };
 
-upLoad.addEventListener('change', loadingPhoto);
+adForm.addEventListener('submit', postPhoto);
 
-export {loadingPhoto, onSuccess, onError};
+export {loadPhoto, onSuccess, onError};

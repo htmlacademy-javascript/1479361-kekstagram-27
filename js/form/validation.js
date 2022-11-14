@@ -70,10 +70,7 @@ const hashtagsHandler = (value) => {
 pristine.addValidator(inputHashtag, hashtagsHandler, error, 2, false);
 
 const onHashTagInput = () =>{
-
-  // хрень какая-то надо подумать как блокнуть кнопку адекватнее.
-  const disabledButton = pristine.validate() ? buttonUploadSubmit.disabled = false : buttonUploadSubmit.disabled = true;
-  return disabledButton;
+  buttonUploadSubmit.disabled = !pristine.validate();
 };
 
 

@@ -1,4 +1,5 @@
 const ALERT_SHOW_TIME = 5000;
+const MAX_SHUFFLED_COUNT = 10;
 
 const lengthCheck = (string, maxLength) => string.length <= maxLength;
 
@@ -46,4 +47,22 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-export {lengthCheck, declarationOfNumber, showAlert, debounce};
+const checkEscape = (evt) => evt.key === 'Escape';
+
+const sortInDescendingOrder = (data) => [...data].sort((current, previos) => {
+  if (current.comments.length < previos.comments.length) {
+    return 1;
+  }
+  if (current.comments.length > previos.comments.length) {
+    return -1;
+  }
+  return 0;
+});
+
+const shuffleArray = (array) => array
+  .slice()
+  .sort(() => Math.random() - 0.5)
+  .slice(0, MAX_SHUFFLED_COUNT);
+
+
+export {lengthCheck, declarationOfNumber, showAlert, debounce, checkEscape, sortInDescendingOrder, shuffleArray};

@@ -1,13 +1,14 @@
-const scalePhoto = () => {
-  const MIN_SIZE = 25;
-  const MAX_SIZE = 100;
-  const SIZE_STEP = 25;
+const MIN_SIZE = 25;
+const MAX_SIZE = 100;
+const SIZE_STEP = 25;
 
-  const uploadFormContainer = document.querySelector('.img-upload__preview-container');
-  const uploadPreview = document.querySelector('.img-upload__preview');
-  const controllSmallerButton = uploadFormContainer.querySelector('.scale__control--smaller');
-  const controllBiggerButton = uploadFormContainer.querySelector('.scale__control--bigger');
-  const controllValue = uploadFormContainer.querySelector('.scale__control--value');
+const uploadFormContainer = document.querySelector('.img-upload__preview-container');
+const uploadPreview = document.querySelector('.img-upload__preview');
+const controllSmallerButton = uploadFormContainer.querySelector('.scale__control--smaller');
+const controllBiggerButton = uploadFormContainer.querySelector('.scale__control--bigger');
+const controllValue = uploadFormContainer.querySelector('.scale__control--value');
+
+const scalePhoto = () => {
 
   let sizePhoto = 100;
 
@@ -42,4 +43,4 @@ const scalePhoto = () => {
   });
 };
 
-export default scalePhoto;
+export {scalePhoto};

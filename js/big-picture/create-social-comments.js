@@ -1,4 +1,4 @@
-import { declarationOfNumber } from '../utils.js';
+import { checkEscape, declarationOfNumber } from '../utils.js';
 
 export const createSocialComments = (commentsData) => {
   const STEP_RENDER_COMMENTS = 5;
@@ -59,7 +59,7 @@ export const createSocialComments = (commentsData) => {
   });
 
   const onKeydown = (evt) => {
-    if(evt.key === 'Escape'){
+    if(checkEscape(evt)){
       document.body.classList.remove('modal-open');
       commentsLoaderButton.classList.remove('hidden');
       window.removeEventListener('keydown', onKeydown);
@@ -73,7 +73,7 @@ export const createSocialComments = (commentsData) => {
 
   };
 
-  window.addEventListener('keydown', onKeydown);
+  document.addEventListener('keydown', onKeydown);
   cancelPicture.addEventListener('click', onClickCross);
 
 };
