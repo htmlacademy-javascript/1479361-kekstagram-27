@@ -1,9 +1,12 @@
-import bigPicturePhoto from './big-picture/big-picture.js';
+import {renderBigPhoto} from './big-picture/big-photo.js';
+
+const pictureTemplate = document.querySelector('#picture').content;
+const picturesContainer = document.querySelector('.pictures');
+const pictureListFragment = document.createDocumentFragment();
+const photoFilters = document.querySelector('.img-filters');
+
 
 const generatePhotos = (data) => {
-  const pictureTemplate = document.querySelector('#picture').content;
-  const picturesContainer = document.querySelector('.pictures');
-  const pictureListFragment = document.createDocumentFragment();
 
   data.forEach((dataPhoto) => {
     const picture = pictureTemplate.cloneNode(true);
@@ -16,13 +19,21 @@ const generatePhotos = (data) => {
     comments.textContent = dataPhoto.comments.length;
 
     imgAttribute.addEventListener(('click'), () => {
-      bigPicturePhoto(dataPhoto);
+      renderBigPhoto(dataPhoto);
     });
 
     pictureListFragment.append(picture);
   });
 
   picturesContainer.append(pictureListFragment);
+  photoFilters.className = 'img-filters container';
 };
 
-export default generatePhotos;
+const removePhotos = () => {
+  const pictures = picturesContainer.querySelectorAll('.picture');
+  pictures.forEach((item) => {
+    item.remove();
+  });
+};
+
+export {generatePhotos, removePhotos};

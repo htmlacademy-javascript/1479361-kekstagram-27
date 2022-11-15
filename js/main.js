@@ -1,6 +1,21 @@
-import generatePhotos from './small-photos.js';
-import photosData from './mocks.js';
-import form from './form/form.js';
+import { sendRequest } from './api.js';
+import {loadPhoto} from './form/form.js';
+import { generatePhotos } from './small-photos.js';
+import { showAlert } from './utils.js';
+import { sortPhotos } from './sort/sort-photos.js';
 
-generatePhotos(photosData);
-form();
+const filtersForm = document.querySelector('.img-filters__form');
+const upLoad = document.querySelector('#upload-file');
+let photos = [];
+
+const onFiltersFormClick = (evt) => sortPhotos(evt, photos);
+
+const onSuccess = (data) => {
+  photos = data.slice();
+  generatePhotos(photos);
+  filtersForm.addEventListener('click', onFiltersFormClick);
+};
+
+upLoad.addEventListener('change', loadPhoto);
+
+sendRequest(onSuccess, showAlert, 'GET');

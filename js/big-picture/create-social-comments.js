@@ -1,4 +1,4 @@
-import { declOfNum } from '../utils.js';
+import { checkEscape, declarationOfNumber } from '../utils.js';
 
 export const createSocialComments = (commentsData) => {
   const STEP_RENDER_COMMENTS = 5;
@@ -13,24 +13,21 @@ export const createSocialComments = (commentsData) => {
   const bigPicture = document.querySelector('.big-picture');
   const cancelPicture = bigPicture.querySelector('#picture-cancel');
 
-  const words = ['комментарий', 'комментария', 'комментариев'];
+  const words = ['комментария', 'комментариев', 'комментариев'];
   let from = 0;
-  let to = 5;
+  let howMany = 5;
 
   commentsContainer.innerHTML = '';
 
-  if(commentsData.length > CURRENT_COUNT_COMMENTS) {
-    socialCommentCount.textContent = `${CURRENT_COUNT_COMMENTS} из ${commentsData.length} ${declOfNum(commentsData.length, words)}`;
-  }else {
-    socialCommentCount.textContent = `${commentsData.length} из ${commentsData.length} ${declOfNum(commentsData.length, words)}`;
-    commentsLoaderButton.classList.add('hidden');
-  }
+  socialCommentCount.textContent = commentsData.length > CURRENT_COUNT_COMMENTS
+    ? `${CURRENT_COUNT_COMMENTS} из ${commentsData.length} ${declarationOfNumber(commentsData.length, words)}`
+    : (commentsLoaderButton.classList.add('hidden') ,`${commentsData.length} из ${commentsData.length} ${declarationOfNumber(commentsData.length, words)}`);
 
   commentsLoaderButton.addEventListener('click', () => {
     from += STEP_RENDER_COMMENTS;
-    to += STEP_RENDER_COMMENTS;
+    howMany += STEP_RENDER_COMMENTS;
 
-    commentsData.slice(from, to).map((commentData) => {
+    commentsData.slice(from, howMany).map((commentData) => {
       const commentContainer = comment.cloneNode(true);
       const socialComm = socialCommentCount.cloneNode(true);
 
@@ -39,13 +36,13 @@ export const createSocialComments = (commentsData) => {
       socialText.textContent = commentData.message;
       commentsContainer.append(commentContainer);
 
-      if(to >= commentsData.length){
+      if(howMany >= commentsData.length){
         commentsLoaderButton.classList.add('hidden');
         socialComm.classList.remove('social__comment-count');
-        socialComm.innerHTML = `${commentsData.length} из <span class="comments-count">${commentsData.length}</span> ${declOfNum(commentsData.length, words)}`;
+        socialComm.innerHTML = `${commentsData.length} из <span class="comments-count">${commentsData.length}</span> ${declarationOfNumber(commentsData.length, words)}`;
       }else {
         socialComm.classList.remove('social__comment-count');
-        socialComm.innerHTML = `${to} из <span class="comments-count">${commentsData.length}</span> ${declOfNum(commentsData.length, words)}`;
+        socialComm.innerHTML = `${howMany} из <span class="comments-count">${commentsData.length}</span> ${declarationOfNumber(commentsData.length, words)}`;
       }
 
       socialCommentCount.innerHTML = '';
@@ -53,7 +50,7 @@ export const createSocialComments = (commentsData) => {
     });
   });
 
-  commentsData.slice(from, to).map((commentData) => {
+  commentsData.slice(from, howMany).map((commentData) => {
     const commentContainer = comment.cloneNode(true);
     socialPicture.src = commentData.avatar;
     socialPicture.alt = commentData.name;
@@ -62,7 +59,7 @@ export const createSocialComments = (commentsData) => {
   });
 
   const onKeydown = (evt) => {
-    if(evt.key === 'Escape'){
+    if(checkEscape(evt)){
       document.body.classList.remove('modal-open');
       commentsLoaderButton.classList.remove('hidden');
       window.removeEventListener('keydown', onKeydown);
@@ -76,7 +73,7 @@ export const createSocialComments = (commentsData) => {
 
   };
 
-  window.addEventListener('keydown', onKeydown);
+  document.addEventListener('keydown', onKeydown);
   cancelPicture.addEventListener('click', onClickCross);
 
 };
