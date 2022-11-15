@@ -16,31 +16,29 @@ const scalePhoto = () => {
   controllValue.value = `${sizePhoto}%`;
   uploadPreview.style.transform = `scale(${sizePhoto}%)`;
 
-  controllBiggerButton.disabled = true;
-  controllSmallerButton.disabled = false;
+  const changeSize = (factor = 1) => {
+    sizePhoto = sizePhoto + SIZE_STEP * factor;
 
-  controllSmallerButton.addEventListener('click', () => {
-    controllBiggerButton.disabled = false;
-    controllValue.value = `${sizePhoto -= SIZE_STEP}%`;
+    if(sizePhoto < MIN_SIZE){
+      sizePhoto = MIN_SIZE;
+    }
+
+    if(sizePhoto > MAX_SIZE){
+      sizePhoto = MAX_SIZE;
+    }
+
+    controllValue.value = `${sizePhoto}%`;
+
     uploadPreview.style.webkitTransition = 'all 0.5s linear';
     uploadPreview.style.transform = `scale(${sizePhoto}%)`;
-    if(sizePhoto <= MIN_SIZE){
-      controllSmallerButton.disabled = true;
-    }else {
-      controllSmallerButton.disabled = false;
-    }
-  });
+  };
 
-  controllBiggerButton.addEventListener('click', () => {
-    controllSmallerButton.disabled = false;
-    controllValue.value = `${sizePhoto += SIZE_STEP}%`;
-    uploadPreview.style.transform = `scale(${sizePhoto}%)`;
-    if(sizePhoto >= MAX_SIZE){
-      controllBiggerButton.disabled = true;
-    }else {
-      controllBiggerButton.disabled = false;
-    }
-  });
+  const onSmallerButtonClick = () => changeSize(-1);
+
+  const onBiggerButtonClick = () => changeSize();
+
+  controllSmallerButton.addEventListener('click', onSmallerButtonClick);
+  controllBiggerButton.addEventListener('click', onBiggerButtonClick);
 };
 
 export {scalePhoto};
