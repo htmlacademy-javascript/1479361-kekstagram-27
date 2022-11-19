@@ -6,12 +6,11 @@ const uploadFormContainer = document.querySelector('.img-upload__preview-contain
 const uploadPreview = document.querySelector('.img-upload__preview');
 const controllSmallerButton = uploadFormContainer.querySelector('.scale__control--smaller');
 const controllBiggerButton = uploadFormContainer.querySelector('.scale__control--bigger');
+const image = uploadFormContainer.querySelector('img');
 const controllValue = uploadFormContainer.querySelector('.scale__control--value');
 
 const scalePhoto = () => {
-
   let sizePhoto = 100;
-
   controllValue.value = `${sizePhoto}%`;
   controllValue.value = `${sizePhoto}%`;
   uploadPreview.style.transform = `scale(${sizePhoto}%)`;
@@ -29,8 +28,8 @@ const scalePhoto = () => {
 
     controllValue.value = `${sizePhoto}%`;
 
-    uploadPreview.style.webkitTransition = 'all 0.5s linear';
-    uploadPreview.style.transform = `scale(${sizePhoto}%)`;
+    image.style.transition = 'all 0.5s linear';
+    image.style.transform = `scale(${sizePhoto}%)`;
   };
 
   const onSmallerButtonClick = () => changeSize(-1);

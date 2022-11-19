@@ -1,5 +1,5 @@
 import { sendRequest } from './api.js';
-import {loadPhoto} from './form/form.js';
+import {onLoadPhotoChange} from './form/form.js';
 import { generatePhotos } from './small-photos.js';
 import { showAlert } from './utils.js';
 import { sortPhotos } from './sort/sort-photos.js';
@@ -16,6 +16,6 @@ const onSuccess = (data) => {
   filtersForm.addEventListener('click', onFiltersFormClick);
 };
 
-upLoad.addEventListener('change', loadPhoto);
+upLoad.addEventListener('change', onLoadPhotoChange);
 
 sendRequest(onSuccess, showAlert, 'GET');

@@ -64,7 +64,7 @@ const effects = {
   },
 };
 
-const effectSelectionClick = (evt) => {
+const onEffectSelectionClick = (evt) => {
   let target = evt.target;
 
   if(target.classList.contains('effects__label')){
@@ -91,7 +91,7 @@ const changeFilter = () => {
   image.style.filter = effects[currentEffect.replace('effects__preview--', '')]();
 };
 
-effectsList.addEventListener('click', effectSelectionClick);
+effectsList.addEventListener('click', onEffectSelectionClick);
 
 sliderElement.noUiSlider.on('change', changeFilter);
 
