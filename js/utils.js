@@ -1,9 +1,7 @@
 const ALERT_SHOW_TIME = 5000;
 const MAX_SHUFFLED_COUNT = 10;
 
-const lengthCheck = (string, maxLength) => string.length <= maxLength;
-
-const declarationOfNumber = (number, words) => words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? Math.abs(number) % 10 : 5]];
+const changeDeclanation = (number, words) => words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? Math.abs(number) % 10 : 5]];
 
 const showAlert = () => {
   const alertContainer = document.createElement('div');
@@ -65,4 +63,4 @@ const shuffleArray = (array) => array
   .slice(0, MAX_SHUFFLED_COUNT);
 
 
-export {lengthCheck, declarationOfNumber, showAlert, debounce, checkEscape, sortInDescendingOrder, shuffleArray};
+export {changeDeclanation, showAlert, debounce, checkEscape, sortInDescendingOrder, shuffleArray};

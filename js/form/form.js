@@ -46,10 +46,12 @@ const onKeydown = (evt) => {
 };
 
 const onKeydownBadModal = (evt) => {
-  if(checkEscape(evt)){
-    evt.currentTarget.body.querySelector('.popup_alert').remove();
-    document.removeEventListener('keydown', onKeydownBadModal);
+  if(evt.target.querySelector('.popup_alert').className === 'error popup_alert') {
     document.addEventListener('keydown', onKeydown);
+  }
+  if(checkEscape(evt)){
+    evt.target.querySelector('.popup_alert').remove();
+    document.removeEventListener('keydown', onKeydownBadModal);
   }
 };
 
@@ -86,13 +88,13 @@ const onError = () => {
   badRequestModal.addEventListener('click', onClickModal);
 };
 
-const postPhoto = (evt) => {
+const onPostPhotoSubmit = (evt) => {
   evt.preventDefault();
   formData = new FormData(evt.target);
   sendRequest(onSuccess, onError, 'POST', formData);
 };
 
-const loadPhoto = (evt) => {
+const onLoadPhotoChange = (evt) => {
   evt.preventDefault();
   document.body.classList.add('modal-open');
   upLoadOverlay.classList.remove('hidden');
@@ -110,6 +112,6 @@ const loadPhoto = (evt) => {
   scalePhoto();
 };
 
-adForm.addEventListener('submit', postPhoto);
+adForm.addEventListener('submit', onPostPhotoSubmit);
 
-export {loadPhoto, onSuccess, onError};
+export {onLoadPhotoChange, onSuccess, onError};
